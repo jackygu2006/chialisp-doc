@@ -10,7 +10,7 @@
 贡献者：
 * jackiegu
 * bitcheck
-
+* mg00736448
 
 ### 第一章：介绍
 #### 1、Chia是什么？
@@ -21,9 +21,10 @@
 #### 1、[安装与节点同步](./install_dev.md)
 #### 2、[chia常用命令](./useful_command.md)
 #### 3、[获取测试币](faucet.md)
+#### 4、[搭建clvm开发环境](clvm_dev.md)
 
 ### 第三章：ChiaLisp语言入门
-#### 1、基础语法
+#### 1、ChiaLisp基础语法
 参考：https://github.com/Chia-Network/wallets/blob/main/docs/part1_basics.md
 #### 2、交易
 参考：https://github.com/Chia-Network/wallets/blob/main/docs/part2_transactions.md
