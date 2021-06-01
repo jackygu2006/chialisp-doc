@@ -17,6 +17,10 @@ cd chia-blockchain
 sh install.sh
 ```
 如果本地已经安装了主网的钱包，并且已经设置了账号，没关系，因为测试网的账号与主网不冲突，但是不能安装到同一个目录中。
+建议提前安装python3.6或者以上版本
+国内用户建议使用github镜像访问，比如https://github.com.cnpmjs.org或者https://hub.fastgit.org。直接在访问链接中替换域名部分即可
+新目录记得处理下权限，chmod 777 ./*.sh。然后使用./install.sh
+
 
 测试网的账号以`txch`开头，主网的账号以`xch`开头。
 
@@ -36,7 +40,6 @@ chia show -s
 ![](https://tva1.sinaimg.cn/large/008i3skNgy1gr2t3gfw23j31hy0u07wi.jpg)
 
 如果`当前网络高度`等于`本节点高度`时，说明节点同步完成。
-时间比较长，请耐心等待。在我写这个教程时，需要半天时间，随着数据量增加，会需要更长时间。
 
 ### 升级安装
 使用`git pull`拉取最新源码后，执行以下命令：
