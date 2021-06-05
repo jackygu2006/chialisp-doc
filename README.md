@@ -16,6 +16,8 @@
 #### 1、Chia是什么？
 #### 2、ChiaLisp是什么？
 #### 3、为什么要用Lisp语言？
+#### 4、[FAQ](faq.md)
+#### 5、关于CCWallet/RLWallet/DIDWallet
 
 ### 第二章：开发环境搭建
 #### 1、[安装与节点同步](./install_dev.md)
@@ -23,7 +25,12 @@
 #### 3、[获取测试币](faucet.md)
 #### 4、[搭建clvm开发环境](clvm_dev.md)
 
-### 第三章：ChiaLisp语言入门
+### 第三章：与链交互
+#### 1、[RPC概述](rpc.md)
+#### 2、[Curl调用RPC](rpc_curl.md)
+#### 3、[Javascript库](rpc_js.md)
+
+### 第四章：ChiaLisp语言入门
 #### 1、ChiaLisp基础语法
 参考：https://github.com/Chia-Network/wallets/blob/main/docs/part1_basics.md
 #### 2、交易
@@ -33,7 +40,7 @@
 #### 4、钱包操作
 参考：https://github.com/Chia-Network/wallets
 
-### 第四章：ChiaLisp实战
+### 第五章：ChiaLisp实战
 #### 1、彩色币发币
 #### 2、Rate-Limited钱包
 参考：https://github.com/Chia-Network/wallets/blob/main/docs/rate_limited_wallet.md
@@ -48,7 +55,7 @@
 #### 7、多钱钱包
 参考：https://github.com/Chia-Network/wallets/blob/main/multisig/README.org
 
-### 第五章：Chia主网部署与执行
+### 第六章：Chia主网部署与执行
 
 ### 附：
 名词解释，https://github.com/Chia-Network/wallets/blob/main/docs/glossary.md
