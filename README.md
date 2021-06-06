@@ -1,5 +1,5 @@
 ## Chia技术开发手册
-Written by @JackieGu, @mg00736448, @bitcheck
+Written by @JackieGu, @mg00736448
 
 ### 第一章：介绍
 #### 1、[基础FAQ](faq.md)
