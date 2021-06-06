@@ -5,8 +5,9 @@ Written by @JackieGu, @mg00736448, @bitcheck
 #### 1、[基础FAQ](faq.md)
 #### 2、[挖矿相关FAQ](faq_plot.md)
 #### 3、[矿池相关FAQ](faq_pool.md)
+#### 4、[Chialisp FAQ](faq_chialisp.md)
 #### 4、[共识机制与技术理论](consensus.md)
-#### 6、CCWallet/RLWallet/DIDWallet
+#### 6、[智能交易钱包类型](wallet_type.md)
 
 ### 第二章：开发环境搭建
 #### 1、[安装与节点同步](./install_dev.md)
@@ -23,7 +24,11 @@ Written by @JackieGu, @mg00736448, @bitcheck
 #### 1、ChiaLisp基础语法
 参考：https://github.com/Chia-Network/wallets/blob/main/docs/part1_basics.md
 #### 2、交易
-参考：https://github.com/Chia-Network/wallets/blob/main/docs/part2_transactions.md
+参考：
+
+https://github.com/Chia-Network/wallets/blob/main/docs/part2_transactions.md
+
+https://chialisp.com/docs/coins_spends_and_wallets/
 #### 3、编译
 参考：https://github.com/Chia-Network/wallets/blob/main/docs/part4_compiler_and_tips.md
 #### 4、钱包操作
