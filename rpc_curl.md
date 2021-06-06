@@ -36,8 +36,20 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.
 #### 1.9- get_additions_and_removals
 
 #### 1.10- get_initial_freeze_period
+Get initial freeze periods
+* Params: None
 
 #### 1.11- get_network_info
+Get network informaton
+* Params: None
+* Response:
+```
+{
+    "network_name": "testnet7",
+    "network_prefix": "txch",
+    "success": true
+}
+```
 
 #### 1.12- get_coin_records_by_puzzle_hash
 
@@ -195,23 +207,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 获取当前区块高度
 * Params: None
 
-#### 2.10- get_initial_freeze_period
-获取初始冻结期
-* Params: None
-
-#### 2.11- get_network_info
-获取网络信息
-* Params: None
-* Response:
-```
-{
-    "network_name": "testnet7",
-    "network_prefix": "txch",
-    "success": true
-}
-```
-
-#### 2.12- get_wallets
+#### 2.10- get_wallets
 获取钱包管理器信息
 * Params: None
 * Example:
@@ -242,7 +238,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 }
 ```
 
-#### 2.13- create_new_wallet
+#### 2.11- create_new_wallet
 在当前`key`下创建不同类型的新钱包。
 
 可以通过`ChiaLisp`语言自定义特殊功能的钱包。
@@ -298,7 +294,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 
 
 
-#### 2.14- get_next_address
+#### 2.12- get_next_address
 获取钱包新的地址
 
 注意：首先需要选择当前钱包`chia wallet show`或者用`log_in`
@@ -313,7 +309,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 -H "Content-Type: application/json" -X POST https://localhost:9256/get_next_address | python -m json.tool
 ```
 
-#### 2.15- get_wallet_balance
+#### 2.13- get_wallet_balance
 获取当前钱包余额
 
 注意：首先需要选择当前钱包`chia wallet show`或者用`log_in`
@@ -327,7 +323,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 -H "Content-Type: application/json" -X POST https://localhost:9256/get_wallet_balance | python -m json.tool
 ```
 
-#### 2.16- create_signed_transaction
+#### 2.14- create_signed_transaction
 创建签名交易
 
 * Params:
@@ -366,7 +362,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.
         -H "Content-Type: application/json" -X POST https://localhost:8555/push_tx | python -m json.tool
 ```
 
-#### 2.17- send_transaction
+#### 2.15- send_transaction
 发送标准钱包内的`xch`交易
 
 * Params:
@@ -384,7 +380,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 * Response:`transaction_id`
 
 
-#### 2.18- get_transaction
+#### 2.16- get_transaction
 获取交易明细
 
 * Params:
@@ -397,7 +393,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 -H "Content-Type: application/json" -X POST https://localhost:9256/get_transaction | python -m json.tool
 ```
 
-#### 2.19- get_transactions
+#### 2.17- get_transactions
 获取所有交易
 
 * Params:
@@ -412,7 +408,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 -H "Content-Type: application/json" -X POST https://localhost:9256/get_transactions | python -m json.tool
 ```
 
-#### 2.20- get_transaction_count
+#### 2.18- get_transaction_count
 获取交易数量
 
 * Params:
@@ -425,8 +421,18 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 -H "Content-Type: application/json" -X POST https://localhost:9256/get_transaction_count | python -m json.tool
 ```
 
-#### 2.21- get_farmed_amount
+#### 2.19- farm_block
+Farm block
+* Params: 
+    * address
 
+#### 2.20- get_farmed_amount
+* Params: none
+
+#### 2.21- create_backup
+Create backup wallets
+* Params: 
+    * file_path
 
 ### 3- CC Wallet
 #### 3.1- cc_set_name
