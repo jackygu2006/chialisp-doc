@@ -1,23 +1,12 @@
-教程目的：
-* 推动Chia生态发展
-* 培养Chia开发技术人员
-
-教程撰写方式：
-
-* 根据官方教程以及教程贡献者的实际工作经验，完善开发教程
-* 所有发布内容需要确保在开发环境中跑通
-
-贡献者：
-* jackiegu
-* bitcheck
-* mg00736448
+## Chia技术开发手册
+Written by @JackieGu, @mg00736448, @bitcheck
 
 ### 第一章：介绍
-#### 1、Chia是什么？
-#### 2、ChiaLisp是什么？
-#### 3、为什么要用Lisp语言？
-#### 4、[FAQ](faq.md)
-#### 5、关于CCWallet/RLWallet/DIDWallet
+#### 1、[基础FAQ](faq.md)
+#### 2、[挖矿相关FAQ](faq_plot.md)
+#### 3、[矿池相关FAQ](faq_pool.md)
+#### 4、[共识机制与技术理论](consensus.md)
+#### 6、CCWallet/RLWallet/DIDWallet
 
 ### 第二章：开发环境搭建
 #### 1、[安装与节点同步](./install_dev.md)
@@ -41,8 +30,8 @@
 参考：https://github.com/Chia-Network/wallets
 
 ### 第五章：ChiaLisp实战
-#### 1、彩色币发币
-#### 2、Rate-Limited钱包
+#### 1、彩色币钱包(CCWallet)
+#### 2、限额钱包(RLWallet)
 参考：https://github.com/Chia-Network/wallets/blob/main/docs/rate_limited_wallet.md
 #### 3、可逆钱包合约
 参考：https://github.com/Chia-Network/wallets/blob/main/docs/recoverable_wallet.md
@@ -59,3 +48,5 @@
 
 ### 附：
 名词解释，https://github.com/Chia-Network/wallets/blob/main/docs/glossary.md
+
+
