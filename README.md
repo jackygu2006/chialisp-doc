@@ -23,13 +23,11 @@ Written by @JackieGu, @mg00736448
 ### 第四章：ChiaLisp语言入门
 #### 1、ChiaLisp基础语法
 参考：https://github.com/Chia-Network/wallets/blob/main/docs/part1_basics.md
-#### 2、交易
-参考：
+#### 2、ChiaLisp智能交易开发原理
+##### 2.1、[Coins,Spends与Wallets](./coin_spend_wallet.md)
+##### 2.2、[名词解释](./glossary.md)
 
-https://github.com/Chia-Network/wallets/blob/main/docs/part2_transactions.md
-
-https://chialisp.com/docs/coins_spends_and_wallets/
-#### 3、编译
+#### 3、Chialisp虚拟机 - CLVM
 参考：https://github.com/Chia-Network/wallets/blob/main/docs/part4_compiler_and_tips.md
 #### 4、钱包操作
 参考：https://github.com/Chia-Network/wallets
