@@ -22,16 +22,45 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.
 ```
 
 #### 1.3- get_blocks
+* Params: 
+  * start
+  * end
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.crt \
+--key ~/.chia/testnet_7/config/ssl/full_node/private_full_node.key \
+-d '{"start": 0, "end": 10}' \
+-H "Content-Type: application/json" -X POST https://localhost:8555/get_blocks | python -m json.tool
+```
 
 #### 1.4- get_block_record_by_height
 
 #### 1.5- get_block_record
+* Params:
+  * header_hash
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.crt \
+--key ~/.chia/testnet_7/config/ssl/full_node/private_full_node.key \
+-d '{"header_hash": "0x278eb26be9d36be51748ca459bd285cf3d8538f20ab880c2bc660126aab66969"}' \
+-H "Content-Type: application/json" -X POST https://localhost:8555/get_block_record | python -m json.tool
+```
 
 #### 1.6- get_block_records
 
 #### 1.7- get_unfinished_block_headers
 
 #### 1.8- get_network_space
+* Params: 
+  * newer_block_header_hash
+  * older_block_header_hash
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.crt \
+--key ~/.chia/testnet_7/config/ssl/full_node/private_full_node.key \
+-d '{"newer_block_header_hash": "0x278eb26be9d36be51748ca459bd285cf3d8538f20ab880c2bc660126aab66969", "older_block_header_hash": "0x278eb26be9d36be51748ca459bd285cf3d8538f20ab880c2bc660126aab66969"}' \
+-H "Content-Type: application/json" -X POST https://localhost:8555/get_network_space | python -m json.tool
+```
 
 #### 1.9- get_additions_and_removals
 
