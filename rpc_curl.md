@@ -529,3 +529,40 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 #### 3.9- get_all_trades
 
 #### 3.10- cancel_trade
+
+### 4- 节点链接相关RPC
+#### 4.1- get_connections
+Get all connections
+* Params: None
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/daemon/private_daemon.crt --key ~/.chia/testnet_7/config/ssl/daemon/private_daemon.key -d '{}' -H "Content-Type: application/json" -X POST https://localhost:8555/get_connections | python -m json.tool
+```
+
+#### 4.2- open_connection
+* Params: 
+    * host: ex. "node.chia.net" for mainnet, "localhost" for testnet
+    * port: ex. 8444 for mainnet, 58444 for testnet
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/daemon/private_daemon.crt --key ~/.chia/testnet_7/config/ssl/daemon/private_daemon.key -d '{"host":"localhost","port":9256}' -H "Content-Type: application/json" -X POST https://localhost:8555/open_connection | python -m json.tool
+```
+
+#### 4.3- close_connection
+* Params:
+    * node_id 
+* Example: 
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/daemon/private_daemon.crt --key ~/.chia/testnet_7/config/ssl/daemon/private_daemon.key -d '{"node_id": ""}' -H "Content-Type: application/json" -X POST https://localhost:8555/close_connection | python -m json.tool
+```
+You can find all connections' `node_id` by `get_connections`.
+
+#### 4.4- stop_node
+* Params: None
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/daemon/private_daemon.crt --key ~/.chia/testnet_7/config/ssl/daemon/private_daemon.key -d '{}' -H "Content-Type: application/json" -X POST https://localhost:8555/stop_node | python -m json.tool
+```
+The post target url will be closed. Above demo command will close port 8555(full node). If you want to close wallet, set port `9256` as `-X POST https://localhost:9256/stop_node`
+
+Attn: If you stoped the node port, you can not open it again from curl or javascript, you have to restart in cli mode or restart the client wallet by `chia start all/wallet/full_node/etc.`
+
