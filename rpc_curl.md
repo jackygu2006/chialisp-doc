@@ -227,7 +227,7 @@ Get sync status.
 * Example:
 ```
 curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
---key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key 
+--key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
 -d '{}' \
 -H "Content-Type: application/json" -X POST https://localhost:9256/get_sync_status | python -m json.tool
 ```
