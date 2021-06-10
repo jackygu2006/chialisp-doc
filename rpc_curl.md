@@ -1,5 +1,11 @@
 ## RPC Document
 
+### Menu:
+#### 1- Fullnode
+#### 2- Standard Wallets
+#### 3- CC Wallets
+
+---
 ### 1- FullNode
 #### 1.1- get_blockchain_state
 * Params: None
@@ -126,6 +132,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.
 
 #### 1.18- get_mempool_item_by_tx_id
 
+----
 ### 2- Standard Wallet
 
 #### 2.1- log_in
@@ -463,6 +470,7 @@ Create backup wallets
 * Params: 
     * file_path
 
+---
 ### 3- CC Wallet
 #### 3.1- cc_set_name
 为彩色币钱包命名
@@ -478,7 +486,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 ```
 
 #### 3.2- cc_get_name
-获取彩色币钱包名称
+Get coloured coin name
 * Params:
     * wallet_id
 * Example:
@@ -490,13 +498,13 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 ```
 
 #### 3.3- cc_spend
-支付彩色币
+Spend coloured coin
 * Params:
     * wallet_id
     * inner_address
     * amount：注意金额精度位`1000`
     * fee (option)
-* 实例
+* Example: 
 ```
 curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 --key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
@@ -507,7 +515,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 * 注意：代码有bug，查看链接：https://github.com/Chia-Network/chia-blockchain/issues/6477
 
 #### 3.4- cc_get_colour
-获取彩色币钱包的colour
+Get colour code of coloured-coin
 * Params:
     * wallet_id
 * Example:
@@ -519,16 +527,88 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 ```
 
 #### 3.5- create_offer_for_ids
+Make an offer to swap Token A to Token B, you can send this offer as a file to anybody to confirm the trade.
+* Params:
+    * ids: An object including 2 elements, in each element, the key is wallet_id, and the value is exchange amount. They are always one positive number and one negative number.
+    * filename: the offer filename
+* Example: 
+
+  Making an offer to send 1xch from wallet#1 and get 0.05 coloured coin in wallet#4
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
+--key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
+-d '{"ids": {"1": -1000000000000, "4": 50}, "filename": "erddaewaddfa.offer"}' \
+-H "Content-Type: application/json" -X POST https://localhost:9256/create_offer_for_ids | python -m json.tool
+```
 
 #### 3.6- respond_to_offer
+Accept the offer
+* Params: 
+    * filename
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
+--key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
+-d '{"filename": "erddaewaddfa.offer"}' \
+-H "Content-Type: application/json" -X POST https://localhost:9256/respond_to_offer | python -m json.tool
+```
 
 #### 3.7- get_discrepancies_for_offer
+Get Exchange details of trade.
+* Params:
+    * filename
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
+--key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
+-d '{"filename": "erddaewaddfa.offer"}' \
+-H "Content-Type: application/json" -X POST https://localhost:9256/get_discrepancies_for_offer | python -m json.tool
+```
+* Return:
+```
+{
+    "discrepancies": {
+        "chia": 1000000000000,
+        "ff02ffff01ff02ffff03ffff09ff5bff8080ffff01ff0101ffff01ff02ffff03ffff09ff13ff0280ffff01ff0101ff8080ff018080ff0180ffff04ffff01a0d9448a215a8a96384173272ccda626eafc0c0510ecdcc78b0cc725c235072124ff018080": -50
+    },
+    "success": true
+}
+```
 
 #### 3.8- get_trade
+* Params: 
+    * trade_id
+* Example:
+
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
+--key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
+-d '{"trade_id": "e586d1a315f18de83959c90e15dde8d4f8280967a204856b3d382889dcce370a"}' \
+-H "Content-Type: application/json" -X POST https://localhost:9256/get_trade | python -m json.tool
+```
+注意：`Wallet`RPC接口有bug，运行这条命令时，需要修改源码`wallet_rpc_api.py`。找到函数`get_trade(self, request: Dict)`，将其中`request["trade_id"]`改为`hexstr_to_bytes(request["trade_id"])`
 
 #### 3.9- get_all_trades
+* Params: None
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
+--key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
+-d '{}' \
+-H "Content-Type: application/json" -X POST https://localhost:9256/get_all_trades | python -m json.tool
+```
 
 #### 3.10- cancel_trade
+* Params: 
+    * trade_id
+    * secure
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
+--key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
+-d '{"trade_id": "e586d1a315f18de83959c90e15dde8d4f8280967a204856b3d382889dcce370a"}' \
+-H "Content-Type: application/json" -X POST https://localhost:9256/get_all_trades | python -m json.tool
+```
 
 ### 4- 节点链接相关RPC
 #### 4.1- get_connections
