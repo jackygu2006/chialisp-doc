@@ -1,9 +1,12 @@
 ## RPC Document
 
 ### Menu:
-#### 1- Fullnode
-#### 2- Standard Wallets
-#### 3- CC Wallets
+* 1- Full Node RPC
+* 2- Standard Wallet
+* 3- Coloured Coin Wallet
+* 4- Rate Limited Wallet
+* 5- Distributed identity Wallet
+* 6- Connection Management
 
 ---
 ### 1- FullNode
@@ -40,6 +43,15 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.
 ```
 
 #### 1.4- get_block_record_by_height
+* Params
+    * height
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.crt \
+--key ~/.chia/testnet_7/config/ssl/full_node/private_full_node.key \
+-d '{"height": 1000}' \
+-H "Content-Type: application/json" -X POST https://localhost:8555/get_block_record_by_height | python -m json.tool
+```
 
 #### 1.5- get_block_record
 * Params:
@@ -53,8 +65,25 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.
 ```
 
 #### 1.6- get_block_records
-
+* Params:
+    * start
+    * end
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.crt \
+--key ~/.chia/testnet_7/config/ssl/full_node/private_full_node.key \
+-d '{"start": 0, "end": 10}' \
+-H "Content-Type: application/json" -X POST https://localhost:8555/get_block_records | python -m json.tool
+```
 #### 1.7- get_unfinished_block_headers
+* Params: None
+* Examples:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.crt \
+--key ~/.chia/testnet_7/config/ssl/full_node/private_full_node.key \
+-d '{}' \
+-H "Content-Type: application/json" -X POST https://localhost:8555/get_unfinished_block_headers | python -m json.tool
+```
 
 #### 1.8- get_network_space
 * Params: 
@@ -69,14 +98,37 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.
 ```
 
 #### 1.9- get_additions_and_removals
+* Params
+    * header_hash
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.crt \
+--key ~/.chia/testnet_7/config/ssl/full_node/private_full_node.key \
+-d '{"header_hash": "0x278eb26be9d36be51748ca459bd285cf3d8538f20ab880c2bc660126aab66969"}' \
+-H "Content-Type: application/json" -X POST https://localhost:8555/get_additions_and_removals | python -m json.tool
+```
 
 #### 1.10- get_initial_freeze_period
 Get initial freeze periods
 * Params: None
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.crt \
+--key ~/.chia/testnet_7/config/ssl/full_node/private_full_node.key \
+-d '{}' \
+-H "Content-Type: application/json" -X POST https://localhost:8555/get_initial_freeze_period | python -m json.tool
+```
 
 #### 1.11- get_network_info
 Get network informaton
 * Params: None
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.crt \
+--key ~/.chia/testnet_7/config/ssl/full_node/private_full_node.key \
+-d '{}' \
+-H "Content-Type: application/json" -X POST https://localhost:8555/get_network_info | python -m json.tool
+```
 * Response:
 ```
 {
@@ -240,11 +292,18 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 ```
 
 #### 2.9- get_height_info
-获取当前区块高度
+Get wallet height, this is not block height
 * Params: None
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
+--key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
+-d '{}' \
+-H "Content-Type: application/json" -X POST https://localhost:9256/get_height_info | python -m json.tool
+```
 
 #### 2.10- get_wallets
-获取钱包管理器信息
+Get all wallets
 * Params: None
 * Example:
 ```
@@ -275,69 +334,112 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 ```
 
 #### 2.11- create_new_wallet
-在当前`key`下创建不同类型的新钱包。
-
-可以通过`ChiaLisp`语言自定义特殊功能的钱包。
+Create different type wallets under the currenty fingerprint.
 
 * Params:
-    * host: IP或节点名称，如`https://backup.chia.net`
-    * wallet_type：`cc_wallet` | `rl_wallet` | `did_wallet` | 
-
-* 1- 创建彩色币钱包：
+    * host: ex.`localhost`, `https://backup.chia.net`
+    * wallet_type：can be `cc_wallet` for coloured coin wallet, `rl_wallet` for rate limited wallet and `did_wallet` for distributed identity wallet
+  
+* 1- Create a `Coloured coin wallet`(cc_wallet)
     
-    即`wallet_type`为`cc_wallet`，则还要添加`mode`属性，`mode`属性为`new`或者`existing`；
+    set `wallet_type` as `cc_wallet`，and add param `mode`, `mode` should be `new` for creating a new cc_wallet or `existing` for add a coloured wallet which the coin has been created.
 
-    以及`amount`属性，即初始化数量（精度为1000）
+    You need add another params `amount` as initialized issuing amont, the default decimals is 1000.
 
-```
-curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
---key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
--d '{"host": "https://backup.chia.net", "wallet_type": "cc_wallet", "mode": "new", "amount": 1000000}' \
--H "Content-Type: application/json" -X POST https://localhost:9256/create_new_wallet | python -m json.tool
-```
+    ```
+    curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
+    --key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
+    -d '{"host": "https://backup.chia.net", "wallet_type": "cc_wallet", "mode": "new", "amount": 1000000}' \
+    -H "Content-Type: application/json" -X POST https://localhost:9256/create_new_wallet | python -m json.tool
+    ```
 
-Response:
-```
-{
-"colour": "ff02ffff01ff02ffff03ffff09ff5bff8080ffff01ff0101ffff01ff02ffff03ffff09ff13ff0280ffff01ff0101ff8080ff018080ff0180ffff04ffff01a09b3a8d052feec7f28d71910ed42c24aab8e8b396485f86a799014bd6f0bed5a6ff018080",
-"success": true,
-"type": 6,
-"wallet_id": 2
-}
-```
+    Response:
+    ```
+    {
+    "colour": "ff02ffff01ff02ffff03ffff09ff5bff8080ffff01ff0101ffff01ff02ffff03ffff09ff13ff0280ffff01ff0101ff8080ff018080ff0180ffff04ffff01a09b3a8d052feec7f28d71910ed42c24aab8e8b396485f86a799014bd6f0bed5a6ff018080",
+    "success": true,
+    "type": 6,
+    "wallet_id": 2
+    }
+    ```
 
-添加成功后，再用`get_wallets`RPC命令查询，看到钱包列表中多了一个类型为`CC_WALLET`的钱包。
+    After creating successfully, using `get_wallets` to check the wallets, you will find a new wallet with type `CC_WALLET` has been established.
 
-如果要为现有的彩色币创建钱包，则以上`mode`应为`existing`，对应的`colour`参数使用以上返回的`colour`值。如：
-```
-curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
---key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
--d '{"host": "https://backup.chia.net", "wallet_type": "cc_wallet", "mode": "existing", "colour": "ff02ffff01ff02ffff03ffff09ff5bff8080ffff01ff0101ffff01ff02ffff03ffff09ff13ff0280ffff01ff0101ff8080ff018080ff0180ffff04ffff01a09b3a8d052feec7f28d71910ed42c24aab8e8b396485f86a799014bd6f0bed5a6ff018080"}' \
--H "Content-Type: application/json" -X POST https://localhost:9256/create_new_wallet | python -m json.tool
-```
-执行完后，用`get_wallets`查看，则会发现又多了一个`CC_WALLET`类型的钱包。
-
-
-
-* 2- 创建`rate-limited`钱包：
+    If you want to add an existing coloured coin wallet, set `mode` as `existing`, and `colour` as colour of existing coloured coin.
     
-    即`wallet_type`为`rl_wallet`
+    ```
+    curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
+    --key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
+    -d '{"host": "https://backup.chia.net", "wallet_type": "cc_wallet", "mode": "existing", "colour": "ff02ffff01ff02ffff03ffff09ff5bff8080ffff01ff0101ffff01ff02ffff03ffff09ff13ff0280ffff01ff0101ff8080ff018080ff0180ffff04ffff01a09b3a8d052feec7f28d71910ed42c24aab8e8b396485f86a799014bd6f0bed5a6ff018080"}' \
+    -H "Content-Type: application/json" -X POST https://localhost:9256/create_new_wallet | python -m json.tool
+    ```    
 
+* 2- Create a `rate limited wallet`(rl_wallet)
     
-* 3- 创建`distributed identity wallets`钱包：
+    set `wallet_type` as `rl_wallet`
+    
+    **Do the following steps**
 
-    即`wallet_type`为`did_wallet`
+    * **STEP 1: create a `user` rl_wallet and get `pubkey`**
+    ```
+    curl --insecure --cert /Users/guqianfeng/.chia/testnet_7/config/ssl/daemon/private_daemon.crt \
+    --key /Users/guqianfeng/.chia/testnet_7/config/ssl/daemon/private_daemon.key \
+    -d '{"host":"localhost","wallet_type":"rl_wallet","rl_type":"user"}' \
+    -H "Content-Type: application/json" \
+    -X POST https://localhost:9256/create_new_wallet | python -m json.tool
+    ```
+    The aboved operation will return:
+    ```
+    {
+      id: 5,
+      pubkey: '98d539639a44337ce2a99cbb832c92b969a74b028546fe8cdebbfdaafca40d3299af424973b08b5d44d8cd86faa3b2eb',
+      success: true,
+      type: 1
+    }
+    ```
+    Using `pubkey` for creating `admin` rl_wallet.
 
+    * **STEP 2: Create `admin` rl_wallet**
+    ```
+    curl --insecure --cert /Users/guqianfeng/.chia/testnet_7/config/ssl/daemon/private_daemon.crt \
+    --key /Users/guqianfeng/.chia/testnet_7/config/ssl/daemon/private_daemon.key \
+    -d '{"host":"localhost","wallet_type":"rl_wallet","rl_type":"admin","interval":3,"limit":10,"pubkey":"98d539639a44337ce2a99cbb832c92b969a74b028546fe8cdebbfdaafca40d3299af424973b08b5d44d8cd86faa3b2eb","amount":1000,"fee":1}' \
+    -H "Content-Type: application/json" \
+    -X POST https://localhost:9256/create_new_wallet | python -m json.tool
+    ```
+    Attn: `amount` decimal should be `10^12`。
+
+    Return:
+    ```
+    {
+      id: 5,
+      origin: {
+        amount: 1000000000000,
+        parent_coin_info: '0x9e6bb70f450a79caac8f38eb176672a04c651c99964956fa30741bbc7e743436',
+        puzzle_hash: '0x92cf8450576b98ee910367784304b88049a02073ebd9400c638fcf398ad32351'
+      },
+      pubkey: '811962d408eb6472d4f3657ba684f6d4d37414cabac948c9f8a7b24f13a78bde2491c6a00e40b949f19da0ef23b27301',
+      success: true,
+      type: 1
+    }
+    ```
+    After run successfully, using `get_wallets()` to check the wallets, you will find a new `rate limited` wallet.
+
+* 3- Create `distributed identity wallets`(did_wallet)
+
+    set `wallet_type` as `did_wallet`
+    (to be continued)
 
 
 #### 2.12- get_next_address
-获取钱包新的地址
+Get address of current fingerprint.
 
-注意：首先需要选择当前钱包`chia wallet show`或者用`log_in`
+ATTN. You should login a fingerprint before this operation. Type `chia wallet show` in terminal or using `log_in` command by `curl`(See above)
 
 * Params:
-    * wallet_id：默认1
-    * new_address: 默认true
+    * wallet_id
+    * new_address: Default is true. In Chia, a fingerprint is similar as `public key`, unlimited address can be issue from this `public key`. That means you can get coin into different addresses, but all in your same account. If you don't want new address, set `new_address` as `false`, you will get current address.
+* Example:
 ```
 curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 --key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
@@ -346,12 +448,12 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 ```
 
 #### 2.13- get_wallet_balance
-获取当前钱包余额
-
-注意：首先需要选择当前钱包`chia wallet show`或者用`log_in`
+Get current wallet balance.
 
 * Params:
-    * wallet_id：默认1
+    * wallet_id
+* Examples:
+
 ```
 curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 --key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
@@ -360,10 +462,9 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 ```
 
 #### 2.14- create_signed_transaction
-创建签名交易
 
 * Params:
-    * additions：数组
+    * additions: This is an array, each element including:
         * amount:
         * puzzle_hash:
     * fee
@@ -376,7 +477,8 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 -d '{"additions": [{"amount": 10000000, "puzzle_hash": "3fa549a708302b401c45cf387f8f03b4f76b7c9eabf567bea974f61dedf721e0"}]}' \
 -H "Content-Type: application/json" -X POST https://localhost:9256/create_signed_transaction | python -m json.tool
 ```
-获取返回值中的`spend_bundle`，作为`push_tx`的参数，广播交易。如下：
+The return back data including: `spend_bundle`, this will be params of `push_tx` to broadcast transaction:
+
 ```
 curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.crt \
 --key ~/.chia/testnet_7/config/ssl/full_node/private_full_node.key \
@@ -399,7 +501,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/full_node/private_full_node.
 ```
 
 #### 2.15- send_transaction
-发送标准钱包内的`xch`交易
+Sending `XCH` to other address. This is only for standard wallet. If you want to send coloured coin, you have to use `cc_spend`.
 
 * Params:
     * wallet_id
@@ -417,11 +519,11 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 
 
 #### 2.16- get_transaction
-获取交易明细
 
 * Params:
     * transaction_id
 * Example:
+
 ```
 curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 --key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
@@ -430,7 +532,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 ```
 
 #### 2.17- get_transactions
-获取所有交易
+Get all transactions
 
 * Params:
     * wallet_id
@@ -445,7 +547,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 ```
 
 #### 2.18- get_transaction_count
-获取交易数量
+Get transaction count
 
 * Params:
     * wallet_id
@@ -471,9 +573,9 @@ Create backup wallets
     * file_path
 
 ---
-### 3- CC Wallet
+### 3- Coloured Coin Wallet(CC Wallet)
 #### 3.1- cc_set_name
-为彩色币钱包命名
+Set a name for coloured coin wallet.
 * Params:
     * wallet_id
     * name
@@ -486,7 +588,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 ```
 
 #### 3.2- cc_get_name
-Get coloured coin name
+Get coloured coin wallet name
 * Params:
     * wallet_id
 * Example:
@@ -502,7 +604,7 @@ Spend coloured coin
 * Params:
     * wallet_id
     * inner_address
-    * amount：注意金额精度位`1000`
+    * amount: decimal is `1000`
     * fee (option)
 * Example: 
 ```
@@ -512,7 +614,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 -H "Content-Type: application/json" -X POST https://localhost:9256/cc_spend | python -m json.tool
 
 ```
-* 注意：代码有bug，查看链接：https://github.com/Chia-Network/chia-blockchain/issues/6477
+  *Bug: Check https://github.com/Chia-Network/chia-blockchain/issues/6477, you have to amend the source code.*
 
 #### 3.4- cc_get_colour
 Get colour code of coloured-coin
@@ -534,6 +636,7 @@ Make an offer to swap Token A to Token B, you can send this offer as a file to a
 * Example: 
 
   Making an offer to send 1xch from wallet#1 and get 0.05 coloured coin in wallet#4
+
 ```
 curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 --key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
@@ -586,7 +689,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 -d '{"trade_id": "e586d1a315f18de83959c90e15dde8d4f8280967a204856b3d382889dcce370a"}' \
 -H "Content-Type: application/json" -X POST https://localhost:9256/get_trade | python -m json.tool
 ```
-注意：`Wallet`RPC接口有bug，运行这条命令时，需要修改源码`wallet_rpc_api.py`。找到函数`get_trade(self, request: Dict)`，将其中`request["trade_id"]`改为`hexstr_to_bytes(request["trade_id"])`
+*BUG: There are bugs in `Wallet`RPC, you have to amend the source: `wallet_rpc_api.py`, find function `get_trade(self, request: Dict)`, change `request["trade_id"]` to `hexstr_to_bytes(request["trade_id"])`*
 
 #### 3.9- get_all_trades
 * Params: None
@@ -610,8 +713,81 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
 -H "Content-Type: application/json" -X POST https://localhost:9256/get_all_trades | python -m json.tool
 ```
 
-### 4- 节点链接相关RPC
-#### 4.1- get_connections
+### 4- Rate Limited Wallet(RL Wallet)
+#### 4.1- Create RL Wallet
+see `create_new_wallet`
+
+#### 4.2- rl_set_user_info
+* Params
+    * wallet_id
+    * origin: object with `{parent_coin_info: string, puzzle_hash: string, amount: number}`, `origin` can get from the response data after create new admin rl_wallet by `create_new_wallet` (See above)
+    * interval
+    * limit
+    * admin_pubkey
+* Example
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
+--key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
+-d '{"wallet_id": 5, "orgin": {"parent_coin_info": "0x9e6bb70f450a79caac8f38eb176672a04c651c99964956fa30741bbc7e743436", "puzzle_hash": "0x92cf8450576b98ee910367784304b88049a02073ebd9400c638fcf398ad32351", "amount": 600000000000}, "interval": 3, "limit": 10, "admin_pubkey": "0x811962d408eb6472d4f3657ba684f6d4d37414cabac948c9f8a7b24f13a78bde2491c6a00e40b949f19da0ef23b27301"}' \
+-H "Content-Type: application/json" -X POST https://localhost:9256/rl_set_user_info | python -m json.tool
+```
+
+*Bug: Open `wallet_rpc_api.py`, find function `rl_set_user_info()`, Change as following*
+```
+async with self.service.wallet_state_manager.lock:
+  await rl_user.set_user_info(
+      uint64(request["interval"]),
+      uint64(request["limit"]),
+      origin["parent_coin_info"],
+      origin["puzzle_hash"],
+      origin["amount"],
+      request["admin_pubkey"],
+  )
+```
+To:
+```
+async with self.service.wallet_state_manager.lock:
+  await rl_user.set_user_info(
+      uint64(request["interval"]),
+      uint64(request["limit"]),
+      origin["parent_coin_info"].hex(),
+      origin["puzzle_hash"].hex(),
+      origin["amount"],
+      request["admin_pubkey"].hex(),
+  )
+```
+After amending code, you should run `chia start wallet -r` to restart `wallet`.
+
+#### 4.3- send_clawback_transaction
+* Params:
+  * wallet_id
+  * fee
+* Example
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
+--key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
+-d '{"wallet_id": 5, "fee": 1}' \
+-H "Content-Type: application/json" -X POST https://localhost:9256/send_clawback_transaction | python -m json.tool
+```
+
+#### 4.4- add_rate_limited_fund
+* Params:
+    * wallet_id
+    * puzzle_hash
+    * amount
+    * fee
+* Example:
+```
+curl --insecure --cert ~/.chia/testnet_7/config/ssl/wallet/private_wallet.crt \
+--key ~/.chia/testnet_7/config/ssl/wallet/private_wallet.key \
+-d '{"wallet_id": 5, "puzzle_hash": "0x92cf8450576b98ee910367784304b88049a02073ebd9400c638fcf398ad32351", "amount": 300000000000}' \
+-H "Content-Type: application/json" -X POST https://localhost:9256/add_rate_limited_fund | python -m json.tool
+```
+
+### 5- Distributed identity wallet(DID Wallet)
+
+### 6- Connecting management
+#### 6.1- get_connections
 Get all connections
 * Params: None
 * Example:
@@ -619,7 +795,7 @@ Get all connections
 curl --insecure --cert ~/.chia/testnet_7/config/ssl/daemon/private_daemon.crt --key ~/.chia/testnet_7/config/ssl/daemon/private_daemon.key -d '{}' -H "Content-Type: application/json" -X POST https://localhost:8555/get_connections | python -m json.tool
 ```
 
-#### 4.2- open_connection
+#### 6.2- open_connection
 * Params: 
     * host: ex. "node.chia.net" for mainnet, "localhost" for testnet
     * port: ex. 8444 for mainnet, 58444 for testnet
@@ -627,7 +803,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/daemon/private_daemon.crt --
 curl --insecure --cert ~/.chia/testnet_7/config/ssl/daemon/private_daemon.crt --key ~/.chia/testnet_7/config/ssl/daemon/private_daemon.key -d '{"host":"localhost","port":9256}' -H "Content-Type: application/json" -X POST https://localhost:8555/open_connection | python -m json.tool
 ```
 
-#### 4.3- close_connection
+#### 6.3- close_connection
 * Params:
     * node_id 
 * Example: 
@@ -636,7 +812,7 @@ curl --insecure --cert ~/.chia/testnet_7/config/ssl/daemon/private_daemon.crt --
 ```
 You can find all connections' `node_id` by `get_connections`.
 
-#### 4.4- stop_node
+#### 6.4- stop_node
 * Params: None
 * Example:
 ```
